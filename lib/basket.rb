@@ -1,4 +1,6 @@
 require_relative 'product'
+require_relative 'checkout'
+require_relative 'deal'
 
 class Basket
 
