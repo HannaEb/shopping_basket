@@ -1,28 +1,28 @@
 class Checkout
 
-  attr_reader :basket, :products
+  MINIMUM_PRICE = 50
+  EXTRA_CHARGE = 5
 
-  def initialize(basket_class = Basket.new)
+  attr_reader :basket
+
+  def initialize(basket_class = Basket.new, delivery_class = Delivery.new)
     @basket = basket_class
-    @products = 0
-  end
-
-  def scan_products
-    @products = @basket.contents
+    @delivery = delivery_class
+    @total = 0
   end
 
   def display_total
-     "The total is £#{calculate_total}"
+    calculate_total
+    "The total price is £#{sprintf('%.2f', @total)}"
   end
 
   private
 
-  def quantity_of(product_name)
-    @products.select { |product| product.name == product_name }.count
-  end
-
   def calculate_total
-    @products.inject(0) { |sum, product| sum + product.price }
+    @total =+ (@basket.price + @delivery.cost)
+    if @basket.price < MINIMUM_PRICE
+      @total += EXTRA_CHARGE
+    end
   end
 
 end
